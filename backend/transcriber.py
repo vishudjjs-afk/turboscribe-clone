@@ -2,7 +2,7 @@ import whisper
 import os
 
 # Load the whisper model
-model = whisper.load_model("base")
+model = whisper.load_model("small")
 
 def transcribe_audio(file_path: str) -> dict:
     """
@@ -13,7 +13,7 @@ def transcribe_audio(file_path: str) -> dict:
         return {"error": "File not found"}
     
     # Transcribe the audio
-    result = model.transcribe(file_path)
+    result = model.transcribe(file_path, task="transcribe", language=None)
     
     return {
         "text": result["text"],
