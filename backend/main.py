@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
@@ -18,10 +18,14 @@ def home():
     return {"message": "TurboScribe API is running!"}
 
 @app.post("/transcribe")
-async def transcribe(file: UploadFile = File(...)):
+async def transcribe(
+    file: UploadFile = File(...),
+    language: str = Form(default="auto")
+):
     temp_path = f"temp_{file.filename}"
     with open(temp_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
-    result = transcribe_audio(temp_path)
+
+    result = transcribe_audio(temp_path, language=language)
     os.remove(temp_path)
     return result
